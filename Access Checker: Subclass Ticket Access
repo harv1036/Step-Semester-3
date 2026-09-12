@@ -1,0 +1,37 @@
+public class Ex5_File2_AccessChecker_SubclassTicketAccess {
+
+    static class AccessChecker {
+
+        static String classifyAccess(String fieldModifier, String accessorContext) {
+            boolean allowed;
+            switch (fieldModifier) {
+                case "private":
+                    allowed = accessorContext.equals("SAME_CLASS");
+                    break;
+                case "default":
+                    allowed = accessorContext.equals("SAME_CLASS") || accessorContext.equals("SAME_PACKAGE");
+                    break;
+                case "protected":
+                    if (accessorContext.equals("SUBCLASS_DIFFERENT_PACKAGE_OWN_TYPE")) {
+                        allowed = true;
+                    } else if (accessorContext.equals("SUBCLASS_DIFFERENT_PACKAGE_PARENT_TYPE")) {
+                        allowed = false;
+                    } else {
+                        allowed = accessorContext.equals("SAME_CLASS") || accessorContext.equals("SAME_PACKAGE");
+                    }
+                    break;
+                case "public":
+                    allowed = true;
+                    break;
+                default:
+                    allowed = false;
+            }
+            return allowed ? "ALLOWED" : "DENIED";
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(AccessChecker.classifyAccess("protected", "SUBCLASS_DIFFERENT_PACKAGE_OWN_TYPE"));
+        System.out.println(AccessChecker.classifyAccess("protected", "SUBCLASS_DIFFERENT_PACKAGE_PARENT_TYPE"));
+    }
+}
