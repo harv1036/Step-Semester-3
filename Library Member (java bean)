@@ -1,0 +1,70 @@
+public class LibraryMemberJavaBean {
+
+    static class LibraryMember {
+        private String membershipId;
+        private boolean membershipIdSet;
+        private String name;
+        private boolean premiumMember;
+        private String securityAnswerHash;
+
+        public LibraryMember() {
+
+        }
+
+        String getMembershipId() {
+            return membershipId;
+        }
+
+        void setMembershipId(String id) {
+            if (!membershipIdSet) {
+                this.membershipId = id;
+                this.membershipIdSet = true;
+            }
+
+        }
+
+        String getName() {
+            return name;
+        }
+
+        void setName(String name) {
+            this.name = name;
+        }
+
+        boolean isPremiumMember() {
+            return premiumMember;
+        }
+
+        void setPremiumMember(boolean premium) {
+            this.premiumMember = premium;
+        }
+
+        void setSecurityAnswer(String answer) {
+            this.securityAnswerHash = oneWayTransform(answer);
+        }
+
+        private String oneWayTransform(String input) {
+
+            int hash = 0;
+            for (char c : input.toCharArray()) {
+                hash = hash * 31 + c;
+            }
+            return Integer.toHexString(hash);
+        }
+    }
+
+    public static void main(String[] args) {
+        LibraryMember m = new LibraryMember();
+        m.setMembershipId("LIB-8841");
+        m.setName("Priya Nair");
+        m.setPremiumMember(true);
+        System.out.println(m.getMembershipId());
+
+        m.setMembershipId("FAKE-0000");
+        System.out.println(m.getMembershipId());
+
+        System.out.println(m.isPremiumMember());
+
+        m.setSecurityAnswer("BlueMountain");
+    }
+}
